@@ -225,6 +225,15 @@ class AttachVolumeForm(ProjectFormBase):
         self.fields['instance'].choices = get_instance_choices(project)
 
 
+class AssociateFloatingIPForm(ProjectFormBase):
+    instance = forms.ChoiceField()
+    floating_ip = forms.CharField()
+
+    def __init__(self, project, *args, **kwargs):
+        super(AssociateFloatingIPForm, self).__init__(project, *args, **kwargs)
+        self.fields['instance'].choices = sorted(get_instance_choices(project))
+
+
 class ProjectForm(forms.Form):
     projectname = forms.CharField(label="Project Name", max_length=20)
     description = forms.CharField(label="Description",
