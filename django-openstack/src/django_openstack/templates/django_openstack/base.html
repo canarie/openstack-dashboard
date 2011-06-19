@@ -65,6 +65,9 @@
                   <li {% if p.projectname == project.projectname and sidebar_selected == "volumes" %}class="active"{% endif %}>
                     <a id="lnk_volumes_{{p.projectname}}" href="{% url nova_volumes p.projectname %}">Volumes</a>
                   </li>
+                  <li {% if p.projectname == project.projectname and sidebar_selected == "floatingips" %}class="active"{% endif %}>
+                    <a id="lnk_floatingips_{{p.projectname}}" href="{% url nova_floatingips p.projectname %}">Floating IPs</a>
+                  </li>
                 </ul>              
               {% endif %}
             </div>
