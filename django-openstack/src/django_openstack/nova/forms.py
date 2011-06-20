@@ -231,7 +231,8 @@ class AssociateFloatingIPForm(ProjectFormBase):
 
     def __init__(self, project, *args, **kwargs):
         super(AssociateFloatingIPForm, self).__init__(project, *args, **kwargs)
-        self.fields['instance'].choices = sorted(get_instance_choices(project))
+        self.instance_choices = sorted(get_instance_choices(project))
+        self.fields['instance'].choices = self.instance_choices
 
 
 class ProjectForm(forms.Form):

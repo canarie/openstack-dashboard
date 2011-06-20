@@ -363,7 +363,7 @@ class ProjectManager(object):
         """
         Returns all floating IPs associated with this project.
         """
-        conn = self.get_nova_connection()
+        conn = self.get_openstack_connection()
         return conn.get_all_addresses()
 
     @wrap_nova_error
@@ -371,7 +371,7 @@ class ProjectManager(object):
         """
         Allocate a floating IP for this project.
         """
-        conn = self.get_nova_connection()
+        conn = self.get_openstack_connection()
         return conn.allocate_address()
 
     @wrap_nova_error
@@ -379,7 +379,7 @@ class ProjectManager(object):
         """
         Release a floating IP from this project.
         """
-        conn = self.get_nova_connection()
+        conn = self.get_openstack_connection()
         return conn.release_address(floating_ip)
 
     @wrap_nova_error
@@ -387,7 +387,7 @@ class ProjectManager(object):
         """
         Associate a floating IP with the instance.
         """
-        conn = self.get_nova_connection()
+        conn = self.get_openstack_connection()
         return conn.associate_address(instance_id, floating_ip)
 
     @wrap_nova_error
@@ -395,5 +395,5 @@ class ProjectManager(object):
         """
         Disassociate a floating IP from it's VM.
         """
-        conn = self.get_nova_connection()
+        conn = self.get_openstack_connection()
         return conn.disassociate_address(floating_ip)
