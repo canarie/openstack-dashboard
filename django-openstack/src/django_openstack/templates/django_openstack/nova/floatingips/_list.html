@@ -1,0 +1,47 @@
+        {% if floating_ips %}
+        <table style="width: 100%">
+          <tr>
+            <th>Floating IP</th>
+            <th>Instance ID</th>
+            <th>&nbsp;</th>
+          </tr>
+          {% for floating_ip in floating_ips %}
+            <tr class="{% cycle 'odd' 'even' as rowcolors %}">
+              <td>{{ floating_ip.public_ip }}</td>
+              <td class="odd">{{ floating_ip.instance_id_display }}</td>
+              <td>
+                {% if "None" in floating_ip.instance_id or "" == floating_ip.instance_id %}
+                  <a href="{% url nova_floatingips_release project.projectname floating_ip.public_ip %}" 
+                     id="release_floating_ip_{{ floating_ip.floating_ip_id }}" class="console">Release</a>
+                {% else %}
+                  <a href="{% url nova_floatingips_disassociate project.projectname floating_ip.public_ip %}" 
+                     id="disassociate_floating_ip_{{ floating_ip.floating_ip_id }}" class="console">Disassociate</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% if "None" in floating_ip.instance_id or "" in floating_ip.instance_id %}
+              <form id="associate_floating_ip" method="post" action="{% url nova_floatingips_associate project.projectname %}">
+                {% csrf_token %}
+                <tr class="{{ rowcolors }}">
+                  <td>&nbsp;</td>
+                  <td class="odd">{{ associate_form.instance }}</td>
+                  <td>
+                    <input id="floating_ip_{{ floating_ip.floating_ip_id }}" type="hidden" name="floating_ip" value="{{ floating_ip.public_ip }}" />
+                    {# TODO: disable this button or if instances are "none available" #}
+                    <input id="associate_floating_ip_{{ floating_ip.floating_ip_id }}" class="attach" type="submit" value="Associate" />
+                  </td>
+                </tr>
+              </form>
+            {% endif %}
+          {% endfor %}
+        </table>
+        {% else %}
+        <div class="ui-widget">
+          <div class="ui-state-highlight ui-corner-all">
+            <p>
+              <span class="ui-icon ui-icon-info"></span>
+              No floating IPs currently exist.
+            </p>
+          </div>
+        </div>
+        {% endif %}
