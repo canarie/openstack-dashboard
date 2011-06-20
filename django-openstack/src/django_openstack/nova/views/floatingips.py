@@ -30,8 +30,6 @@ from django_openstack.nova import forms
 from django_openstack.nova import shortcuts
 from django_openstack.nova.exceptions import handle_nova_error
 
-f = open('/tmp/everett-dashboard.log', 'w')
-
 @login_required
 @handle_nova_error
 def index(request, project_id):
@@ -40,18 +38,10 @@ def index(request, project_id):
     associate_form = forms.AssociateFloatingIPForm(project)
     instance_id_display_dict = dict(associate_form.instance_choices)
 
-    f.write('instance_id_display_dict = %s\n' % instance_id_display_dict)
-
-    for instance_choice in associate_form.instance_choices:        
-        f.write('instance_choice = %s\n' % (instance_choice,)) 
-
     for floating_ip in floating_ips:
-        f.write('floating_ip.instance_id = %s\n' % floating_ip.instance_id)
         floating_ip.floating_ip_id = floating_ip.public_ip.replace('.', '_')
         instance_id = floating_ip.instance_id.partition(' ')[0]
         floating_ip.instance_id_display = instance_id_display_dict.get(instance_id, floating_ip.instance_id)
-
-    f.flush()
 
     return render_to_response(
         'django_openstack/nova/floatingips/index.html', 
