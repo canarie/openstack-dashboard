@@ -29,7 +29,7 @@ from django_openstack.core.connection import get_nova_admin_connection
 from django_openstack import log as logging
 from django_openstack.nova import forms as nova_forms
 from django_openstack.nova.exceptions import handle_nova_error
-from django_openstack.nova.shortcuts import get_project_or_404
+from django_openstack.nova.shortcuts import get_project_or_404, get_current_region
 
 
 LOG = logging.getLogger('django_openstack.nova')
@@ -113,11 +113,12 @@ def edit_user(request, project_id, username):
 @handle_nova_error
 def download_credentials(request, project_id):
     project = get_project_or_404(request, project_id)
+    region = get_current_region(request)
 
     response = http.HttpResponse(mimetype='application/zip')
     response['Content-Disposition'] = \
         'attachment; filename=%s-%s-%s-x509.zip' % \
-        (settings.SITE_NAME, project.projectname, request.user)
+        (region['name'], project.projectname, request.user)
     response.write(project.get_zip())
 
     return response

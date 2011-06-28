@@ -1,0 +1,15 @@
+{% load i18n %}{% load django_nova_tags %}
+{% autoescape off %}
+Welcome to {% site_branding %}!
+
+You're receiving this e-mail because you are the administrator for your project in {% site_branding %}.
+
+Your user name: {{ user.username }}
+
+Please use the following link and choose a new password:
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url django.contrib.auth.views.password_reset_confirm uidb36=uid token=token %}
+{% endblock %}
+
+The {% site_branding %} Team
+{% endautoescape %}

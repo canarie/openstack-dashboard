@@ -11,8 +11,8 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 1
-SITE_BRANDING = 'OpenStack'
-SITE_NAME = 'openstack'
+SITE_BRANDING = 'DAIR/ATIR'
+SITE_NAME = 'dair/atir'
 ENABLE_VNC = True
 
 LOGIN_URL = '/accounts/login'
