@@ -137,6 +137,8 @@ class LaunchInstanceForm(forms.Form):
     count = forms.ChoiceField(choices=[(x, x) for x in range(1, 6)])
     size = forms.ChoiceField()
     key_name = forms.ChoiceField()
+    display_name = forms.CharField(required=True, label="Name")
+    #security_group = forms.ChoiceField()
     user_data = forms.CharField(required=False,
                                 widget=forms.widgets.Textarea(
                                     attrs={'rows': 4}))
@@ -221,6 +223,16 @@ class AttachVolumeForm(ProjectFormBase):
         super(AttachVolumeForm, self).__init__(project, *args, **kwargs)
         self.fields['volume'].choices = get_available_volume_choices(project)
         self.fields['instance'].choices = get_instance_choices(project)
+
+
+class AssociateFloatingIPForm(ProjectFormBase):
+    instance = forms.ChoiceField()
+    floating_ip = forms.CharField()
+
+    def __init__(self, project, *args, **kwargs):
+        super(AssociateFloatingIPForm, self).__init__(project, *args, **kwargs)
+        self.instance_choices = sorted(get_instance_choices(project))
+        self.fields['instance'].choices = self.instance_choices
 
 
 class ProjectForm(forms.Form):

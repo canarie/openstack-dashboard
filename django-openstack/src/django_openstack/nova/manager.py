@@ -97,12 +97,28 @@ class ProjectManager(object):
                                            groups=groups,)
 
     @wrap_nova_error
-    def run_instances(self, image_id, **kwargs):
+    def run_instances(self, image_id, instance_type, count,
+                      addressing_type='private', key_name=None,
+                      display_name=None, user_data=None):
         """
         Runs instances of the specified image id.
         """
         conn = self.get_openstack_connection()
-        return conn.run_instances(image_id, **kwargs)
+        params = {
+            'ImageId': image_id,
+            'InstanceType': instance_type,
+            'MinCount': count,
+            'MaxCount': count,
+            'addressing_type': addressing_type,
+        }
+        if key_name is not None:
+            params['key_name'] = key_name
+        if display_name is not None:
+            params['display_name'] = display_name
+        if user_data is not None:
+            params['UserData'] = user_data
+        return conn.get_object('RunInstances', params,
+                boto.ec2.instance.Reservation, verb='POST')
 
     def get_instance_count(self):
         """
@@ -342,3 +358,42 @@ class ProjectManager(object):
     def detach_volume(self, volume_id):
         conn = self.get_openstack_connection()
         return conn.detach_volume(volume_id)
+
+    def get_floating_ips(self):
+        """
+        Returns all floating IPs associated with this project.
+        """
+        conn = self.get_openstack_connection()
+        return conn.get_all_addresses()
+
+    @wrap_nova_error
+    def allocate_floating_ip(self):
+        """
+        Allocate a floating IP for this project.
+        """
+        conn = self.get_openstack_connection()
+        return conn.allocate_address()
+
+    @wrap_nova_error
+    def release_floating_ip(self, floating_ip):
+        """
+        Release a floating IP from this project.
+        """
+        conn = self.get_openstack_connection()
+        return conn.release_address(floating_ip)
+
+    @wrap_nova_error
+    def associate_floating_ip(self, instance_id, floating_ip):
+        """
+        Associate a floating IP with the instance.
+        """
+        conn = self.get_openstack_connection()
+        return conn.associate_address(instance_id, floating_ip)
+
+    @wrap_nova_error
+    def disassociate_floating_ip(self, floating_ip):
+        """
+        Disassociate a floating IP from it's VM.
+        """
+        conn = self.get_openstack_connection()
+        return conn.disassociate_address(floating_ip)

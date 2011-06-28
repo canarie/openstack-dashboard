@@ -1,0 +1,34 @@
+{% extends "django_openstack/nova/floatingips/base.html" %}
+
+{% block title %} - Cloud Computing{% endblock %}
+
+{% block headerjs %}
+{{ block.super }}
+<script type="text/javascript" src="/media/dashboard/js/jquery.form.js"></script>
+{% endblock %}
+
+{% block content %}
+  <div id="page_head">
+    <h2 id="page_heading">Floating IPs</h2>
+    <p id="page_description">Floating IPs are public IP addresses that can be associated with VMs in order to access the VMs.</p>
+  </div>
+
+  {% include "django_openstack/_messages.html" %}
+
+  <div id="instances">
+  {% include "django_openstack/nova/floatingips/_list.html" %}
+  </div>
+
+  <div class="dash_block first">
+      <fieldset>
+        <h3>Allocate New Floating IP</h3>
+        <table>
+          <tr>
+            <td><a href="{% url nova_floatingips_allocate project.projectname %}" id="allocate" class="console">Allocate</a></td>
+          </tr>
+        </table>
+      </fieldset>
+    </form>
+  </div>
+{% endblock %}
+
