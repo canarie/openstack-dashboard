@@ -28,7 +28,7 @@ def get_nova_admin_connection(clc_url=None, region=None):
     Returns a Nova administration connection.
     """
     return adminclient.NovaAdminClient(
-        clc_url=clc_url or settings.NOVA_DEFAULT_ENDPOINT,
-        region=region or settings.NOVA_DEFAULT_REGION,
+        clc_url=settings.NOVA_DEFAULT_ENDPOINT,
+        region=settings.NOVA_DEFAULT_REGION,
         access_key=settings.NOVA_ACCESS_KEY,
         secret_key=settings.NOVA_SECRET_KEY)
