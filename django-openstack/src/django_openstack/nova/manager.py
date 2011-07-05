@@ -42,8 +42,8 @@ class ProjectManager(object):
         openstack = get_nova_admin_connection()
         return openstack.connection_for(self.username,
                                    self.projectname,
-                                   clc_url=settings.NOVA_DEFAULT_ENDPOINT,
-                                   region=settings.NOVA_DEFAULT_REGION)
+                                   clc_url=self.region['endpoint'],
+                                   region=self.region['name'])
 
     def get_zip(self):
         """
