@@ -176,20 +176,20 @@ def revoke(request, project_id, group_name):
         except exceptions.NovaApiError, e:
             messages.error(request, _('Unable to revoke: %s') % e.message)
             LOG.error('Unable to revoke access to group "%s" in project "%s"'
-                     ' for "%s" ports %d-%d. Exception: "%s"' %
+                     ' for "%s" ports %s - %s. Exception: "%s"' %
                       (group_name, project_id, request.POST['protocol'],
                        request.POST['from_port'], request.POST['to_port'],
                        e.message))
         else:
             messages.success(
                 request,
-                _('Security Group %(grp)s: Access to %(proto)s ports %(fr)d - %(to)d has been revoked.') %
-                    {'grp': group_name,
-                     'proto': form.cleaned_data['protocol'],
-                     'fr': form.cleaned_data['from_port'],
-                     'to': form.cleaned_data['to_port']})
+                _('Security Group %s: Access to %s ports %s - %s has been revoked.') %
+                    (group_name,
+                     request.POST['protocol'],
+                     request.POST['from_port'],
+                     request.POST['to_port']))
             LOG.info('Access to group "%s" granted on project "%s" for'
-                     ' "%s" ports %d-%d' %
+                     ' "%s" ports %s - %s' %
                      (group_name, project_id, request.POST['protocol'],
                       request.POST['from_port'], request.POST['to_port']))
 

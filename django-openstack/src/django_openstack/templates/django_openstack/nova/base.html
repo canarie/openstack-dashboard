@@ -63,6 +63,9 @@
                   <li {% if p.projectname == project.projectname and sidebar_selected == "keys" %}class="active"{% endif %}>
                     <a id="lnk_keypairs_{{p.projectname}}" href="{% url nova_keypairs p.projectname %}">Keys</a>
                   </li>
+                  <li {% if p.projectname == project.projectname and sidebar_selected == "securitygroups" %}class="active"{% endif %}>
+                    <a id="lnk_securitygroups_{{p.projectname}}" href="{% url nova_securitygroups p.projectname %}">Security Groups</a>
+                  </li>
                   <li {% if p.projectname == project.projectname and sidebar_selected == "volumes" %}class="active"{% endif %}>
                     <a id="lnk_volumes_{{p.projectname}}" href="{% url nova_volumes p.projectname %}">Volumes</a>
                   </li>

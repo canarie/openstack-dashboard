@@ -218,12 +218,13 @@ class ProjectManager(object):
         Returns the specified security group for this project.
         """
         conn = self.get_openstack_connection()
+        groups = conn.get_all_security_groups()
 
-        try:
-            return conn.get_all_security_groups(
-                    groupnames=name.encode('ASCII'))[0]
-        except IndexError:
-            return None
+        for group in groups:
+            if group.name == name.encode('ASCII'):
+                return group
+
+        return None
 
     @wrap_nova_error
     def has_security_group(self, name):
