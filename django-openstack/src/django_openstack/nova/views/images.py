@@ -19,6 +19,7 @@
 """
 Views for managing Nova images.
 """
+import base64
 
 import re
 
@@ -44,7 +45,7 @@ def _image_lists(images, project_id):
         return i.ownerId == project_id
 
     def image_is_admin(i):
-        return i.ownerId in ['admin']
+        return i.ownerId in [settings.NOVA_PROJECT]
 
     def image_is_community(i):
         return (not image_is_admin(i)) and (not image_is_project(i))
@@ -68,7 +69,6 @@ def index(request, project_id):
         'image_lists': _image_lists(images, project_id),
     }, context_instance=template.RequestContext(request))
 
-
 @login_required
 @handle_nova_error
 def launch(request, project_id, image_id):
@@ -78,13 +78,15 @@ def launch(request, project_id, image_id):
         form = forms.LaunchInstanceForm(project, request.POST)
         if form.is_valid():
             try:
+                user_data_unencoded = re.sub('\r\n', '\n', form.cleaned_data['user_data'])
+                user_data_encoded = base64.b64encode(user_data_unencoded)
+
                 reservation = project.run_instances(image_id,
                     form.cleaned_data['size'],
                     form.cleaned_data['count'],
                     key_name=form.cleaned_data['key_name'],
                     display_name=form.cleaned_data['display_name'],
-                    user_data=re.sub('\r\n', '\n',
-                       form.cleaned_data['user_data']))
+                    user_data=user_data_encoded)
             except exceptions.NovaApiError, e:
                 messages.error(request,
                                _('Unable to launch: %s') % e.message)
