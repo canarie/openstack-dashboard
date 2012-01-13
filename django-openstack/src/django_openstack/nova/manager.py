@@ -50,7 +50,7 @@ class ProjectManager(object):
         Returns a buffer of a zip file containing signed credentials
         for the project's Nova user.
         """
-        openstack = get_nova_admin_connection()
+        openstack = get_nova_admin_connection(clc_url=self.region['endpoint'], region=self.region['name'])
         return openstack.get_zip(self.username, self.projectname)
 
     def get_images(self, image_ids=None):
