@@ -19,7 +19,11 @@
   </div>
 
   <div id="dlg_confirm" title="Confirm Termination" style="display:none;">
-    <p>{% trans "Are you sure you wish to terminate instance" %} <span id="spn_terminate"></span>?</p>
+    <p>{% trans "Are you sure you wish to terminate instance" %} <span class="spn_terminate"></span>?</p>
+  </div>
+
+  <div id="dlg_deny" title="Deny Termination" style="display:none;">
+    <p>You cannont terminate instance <span class="spn_terminate"></span> because it is still associated with a Floating IP. Please disassociate the Floating IP first.</p>
   </div>
 
   <div id="connection_error" style="display:none;" title="Connection Error">
@@ -53,15 +57,32 @@
       width: 500,
       height: 200
     });
+
+    $('#dlg_deny').dialog({
+      buttons: {
+        'Ok': function() { $(this).dialog('close'); }
+      },
+      autoOpen: false,
+      resizable: false,
+      width: 500,
+      height: 200
+    });
   });
 
   var _terminateID = null;
 
   function initInstanceForms() {
     $('.form-terminate').submit(function() {
-      _terminateID = $(this).children(':first').val()
-      $('#spn_terminate').text(_terminateID);
-      $('#dlg_confirm').dialog('open');
+      _terminateID = $(this).children().eq(0).val()
+      _isFloatingIP = $(this).children().eq(1).val()
+      $('.spn_terminate').text(_terminateID);
+
+      if (_isFloatingIP === "IS_FLOATING_IP") {
+        $('#dlg_deny').dialog('open');
+      } else {
+        $('#dlg_confirm').dialog('open');
+      }
+ 
       return false;
     });
   }

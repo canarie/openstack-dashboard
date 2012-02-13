@@ -64,6 +64,7 @@
                  <span class="delete">
                     <form id="form_terminate_{{ instance.id }}" class="form-terminate" method="post" action="{% url nova_instances_terminate project.projectname %}" >
                       <input name="instance_id" type="hidden" value="{{ instance.id }}" />
+                      <input name="is_floating_ip" type="hidden" value="{% if "10." in instance.dns_name %}IS_PRIVATE_IP{% else %}IS_FLOATING_IP{% endif %}" />
                       <input id="terminate_{{instance.id}}" class="terminate" type="submit" value="Terminate" />
                       {% csrf_token %}
                     </form>
@@ -83,6 +84,7 @@
             <td id="actions" class="odd">
               <form id="form_terminate_{{ instance.id }}" class="form-terminate" method="post" action="{% url nova_instances_terminate project.projectname %}" >
                 <input name="instance_id" type="hidden" value="{{ instance.id }}" />
+                <input name="is_floating_ip" type="hidden" value="{% if "10." in instance.dns_name %}IS_PRIVATE_IP{% else %}IS_FLOATING_IP{% endif %}" />
                 <input id="terminate_{{instance.id}}" class="terminate" type="submit" value="Terminate" />
                 {% csrf_token %}
               </form>
