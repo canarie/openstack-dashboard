@@ -7,7 +7,18 @@
   <div id="right_content">
     <div id="page_head">
       <h2 id="page_heading">{% trans "Internal Server Error"%}</h2>
-      <p id="page_description">{% trans "An unexpected error occurred while processing your request.  Please try your request again."%}</p>
+      <!-- <p id="page_description">{% trans "An unexpected error occurred while processing your request.  Please try your request again."%}</p> -->
+      <p id="page_description">{% trans "An error occurred while processing your request. This can occur when you have over-run your project's quotas of either:" %}
+      
+	<ul>
+	<li>{% trans "Instances of VMs most commonly" %}</li>
+	<li>{% trans "Public IPs (floating IPs)" %}</li>
+	<li>{% trans "Virtual CPUs" %}</li>
+	<li>{% trans "Volumes" %}</li>
+	<li>{% trans "Gigabytes" %}</li>
+	</ul><br>
+	{% trans "Please check your quotas and running instances, then try your request again."%}</p>
+	{% trans "If your project is within quota, and are still receive this message, please contact the system's administrator."%}</p>
     </div>
   </div>
 {% endblock %}
