@@ -50,6 +50,11 @@ def _image_lists(images, project_id):
     def image_is_community(i):
         return (not image_is_admin(i)) and (not image_is_project(i))
 
+    def image_is_available(i):
+        return i.state == 'available'
+
+    images = filter(image_is_available, images)
+
     return {'Project Images': filter(image_is_project, images),
             '%s Images' % settings.SITE_BRANDING: filter(image_is_admin,
                                                          images),
